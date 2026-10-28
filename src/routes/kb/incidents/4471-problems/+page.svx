@@ -1,0 +1,48 @@
+---
+layout: runbook
+title: '#4471 · two problems, not one'
+owner: support desk
+status: living
+reviewed: 2026-10-28
+signature: v1.eyJzdWIiOiI0NjI2IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMyMTMyNjksImV4cCI6MTc5MzI5OTY2OX0.t9aBu9JxMa6oXBwFQChtYAuBQDeZyS_5sAsw8qUbkP0
+---
+
+<script>
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+Ticket **#4471** merged **412** unique date reports and was marked known as one parser bug.
+The cause table below is built from the same export the desk uses. It shows **two** causes
+inside that merge. Each needs its own engineering ticket.
+
+<Callout>
+#4471 is not one issue. Split it before you queue a single fix.
+</Callout>
+
+## What #4471 really holds
+
+<CauseTable ticket={4471} />
+
+## Tickets filed
+
+| cause | reports | desk ticket |
+| --- | ---: | --- |
+| `parser` | 379 | [ccswift/mega-s01e03-what-it-shows#1](https://github.com/ccswift/mega-s01e03-what-it-shows/issues/1) |
+| `hint` | 33 | [ccswift/mega-s01e03-what-it-shows#2](https://github.com/ccswift/mega-s01e03-what-it-shows/issues/2) |
+
+- **parser** — shared parser reads dates month-first; day-first tenants flip month and day.
+- **hint** — booking-v3 prints `MM/DD/YYYY` under the field; day-first tenants type the hint,
+  and the form reads it their way. Same symptom, different bug.
+
+Intake tags and subject-line dedupe both treat these as one pile. The tenant + form path in
+`causeOf` is what separates them.
+
+## Why this page
+
+Decision [0001](/kb/decisions/0001-dedupe-by-subject) merges on subject alone. That was right
+for speed and wrong for #4471: twelve subjects, two causes. Keep the merge rule for triage;
+re-read with `CauseTable` before you mark a big ticket known.
+
+<RenderStamp {signature} />
